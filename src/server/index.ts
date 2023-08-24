@@ -4,7 +4,7 @@ import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import Database from "better-sqlite3";
 import { z } from "zod";
 
-import { publicProcedure, router } from "./trpc";
+import { createTRPCRouter, publicProcedure, router } from "./trpc";
 
 import { todos } from "@/db/schema";
 
@@ -13,7 +13,7 @@ const db = drizzle(sqlite);
 
 migrate(db, { migrationsFolder: "drizzle" });
 
-export const appRouter = router({
+export const appRouter = createTRPCRouter({
   getTodos: publicProcedure.query(async () => {
     return await db.select().from(todos).all();
   }),
@@ -26,7 +26,7 @@ export const appRouter = router({
       z.object({
         id: z.number(),
         done: z.number(),
-      })
+      }),
     )
     .mutation(async (opts) => {
       await db
