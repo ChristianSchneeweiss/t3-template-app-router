@@ -37,7 +37,7 @@ interface AuthContext {
  * @see https://create.t3.gg/en/usage/trpc#-servertrpccontextts
  */
 const createInnerTRPCContext = ({ auth }: AuthContext) => {
-  return { auth };
+  return { auth, db }; // db is not working with types somehow, means it is any?
 };
 
 /**
@@ -56,6 +56,8 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
  * transformer
  */
 import { initTRPC, TRPCError } from "@trpc/server";
+import { db } from "@/db/db";
+import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   errorFormatter({ shape }) {
@@ -70,9 +72,7 @@ const isAuthed = t.middleware(({ next, ctx }) => {
   }
 
   return next({
-    ctx: {
-      auth: ctx.auth,
-    },
+    ctx: ctx,
   });
 });
 /**

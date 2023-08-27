@@ -1,9 +1,9 @@
-import { serverClient } from "./_trpc/serverClient";
+import { serverClient } from "@/server/trpc/serverClient";
 
-import TodoList from "./_components/TodoList";
+import TodoList from "@/components/TodoList";
 
 export default async function Home() {
-  const todos = await serverClient.getTodos();
+  const todos = await serverClient().getTodos();
   return (
     <main className="max-w-3xl mx-auto mt-5">
       <TodoList initialTodos={todos} />

@@ -1,7 +1,9 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, pgTable, text } from "drizzle-orm/pg-core";
 
-export const todos = sqliteTable("todos", {
+export const todos = pgTable("todos", {
   id: integer("id").primaryKey(),
   content: text("content"),
   done: integer("done"),
 });
+
+export type Todo = typeof todos.$inferSelect;

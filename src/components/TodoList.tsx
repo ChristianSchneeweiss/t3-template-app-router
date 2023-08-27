@@ -1,14 +1,13 @@
 "use client";
 import { useState } from "react";
 
-import { trpc } from "../_trpc/client";
-import { serverClient } from "../_trpc/serverClient";
+import { trpc } from "@/server/trpc/client";
+import { serverClient } from "@/server/trpc/serverClient";
+import { Todo } from "@/db/schema";
 
-export default function TodoList({
-  initialTodos,
-}: {
-  initialTodos: Awaited<ReturnType<(typeof serverClient)["getTodos"]>>;
-}) {
+type x = (typeof trpc)["getTodos"];
+
+export default function TodoList({ initialTodos }: { initialTodos: Todo[] }) {
   const getTodos = trpc.getTodos.useQuery(undefined, {
     initialData: initialTodos,
     refetchOnMount: false,
